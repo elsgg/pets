@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <title>Питомцы</title>
+        <link rel="stylesheet" href="cssFile.css">
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
+        <link rel="icon" href="dog.png" type="image/png">
+    </head>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        var config = {
+                      apiKey: "AIzaSyDqoha8Uz4MWs49Q4diqHo1ORwWpwheLZw",
+                      authDomain: "pets-1b119.firebaseapp.com",
+                      databaseURL: "https://pets-1b119-default-rtdb.firebaseio.com",
+                      projectId: "pets-1b119",
+                      storageBucket: "pets-1b119.appspot.com",
+                      messagingSenderId: "201656451729",
+                      appId: "1:201656451729:web:a8746e68fca336ab85f530",
+                      measurementId: "G-NMGXGV9X0P"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(config);
+        var userUid=localStorage.getItem("uid");
+        console.log(userUid); 
+        localStorage.setItem('uid', userUid);
+        logout.addEventListener('click',(e)=>{
+            alert('Вы вышли!');
+            location.href = "index.html";
+        });
+
+        var key = localStorage.getItem("keys");
+        var userUid=localStorage.getItem("uid");
+        var gname = localStorage.getItem("namep");
+        var gcontent = localStorage.getItem("contp");
+        var gcity = localStorage.getItem("cityp");
+        var gphone = localStorage.getItem("phonep");
+        var gimag = localStorage.getItem("imagp");
+        document.getElementById("notesName").innerHTML = gname;
+        document.getElementById("myimg").src = gimag;
+        document.getElementById("notesContent").innerHTML = gcontent;
+        document.getElementById("notesCity").innerHTML = gcity;
+        document.getElementById("notesPhone").innerHTML = gphone;
+        var ImgURL;
+        var name;
+        var content;
+        var city;
+        var phone;
+        var imgf
+        var files = [];
+        var reader = new FileReader();
+
+       </script>
+    <body onload='setVal()'>
+
+        <!--шапка -->
+        <div id="heads" style="-webkit-font-smoothing: antialiased;background-color: #16a085;">
+            <div>
+                <div></div>
+                <div class= "div1">
+                    <div  class="div2">
+                        <div class="div3">
+                            <div class="div4">
+                                <div>
+                                    <div class="div5" field="title">Питомцы</div>                                      
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class = "left_menu">
+                            <div style="display: block;">
+                                    <img src="dog.png" style="max-width: 80px; width: 80px;">
+                            </div>
+                        </div>
+                
+                        <div class = "right_menu">
+                            <nav class="nav_menu">
+                                <ul class = "ul_menu">
+                                    <li class= "li1">
+                                        <a class="a_menu"  href="ads.html"  data-menu-item-number="1"
+                                        >Назад</a>
+                                    </li>
+                                    <li class = "li2">
+                                        <a class="a_menu"  href="myads.html" data-menu-item-number="2"
+                                        >Мои объявления</a>
+                                    </li>
+                                    <li class= "li3">
+                                        <a class="a_menu"  href="main.html"  data-menu-item-number="1"
+                                        >Каталог</a>
+                                    </li>
+                                </ul>
+                                <div style="display: block; padding-left: 30px; padding-top: 30px; ">
+                                    <img src="logout.png" id='logout' name="logout" style="max-width: 40px; width: 40px;vertical-align: middle; ">
+                            </div>
+                            </nav>
+                            
+                        </div>
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <a name="catalog" style="font-size:0;"></a>
+        </div>
+        <div style="padding-top:90px;padding-bottom:150px;">
+            <div>
+                <div class="catalogh">
+                    <div class="catalogh2">
+                        <div style="margin-bottom: 20px; text-align:center;">
+                            <div class="text3"><p id = "notesName" style="margin: auto; width: 500px;"></p></div>							
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="catalog1" style="max-width: 1020;justify-content: center;align-items: center; margin: auto; background-color: #e6f2ef;">
+                    <div style="margin: auto;">
+                        <p id = "notesName" style="margin: auto; width: 500px;"></p>
+                        <img id="myimg" style="margin-top:20px; height: 300px; width: 300px; position: relative;left: 50%;transform: translate(-50%, 0); border: 2px solid teal;" alt="">
+                        <p id= "notesContent" class="ctext" style="padding-left:100px;padding-right:10px;color:teal;font-size: 25px;font-weight: 400;"></p>
+                        <p id = "notesCity"  class="ctext" style="padding-left:100px;padding-right:10px;color:teal;font-size: 25px;font-weight: 400;"></p>
+                        <p id = "notesPhone" class="ctext" style="padding-left:100px;padding-right:10px;color:teal;font-size: 25px;font-weight: 400;"></p>
+                    </form>
+                    </div>      
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

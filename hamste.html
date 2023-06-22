@@ -1,0 +1,284 @@
+<html>
+    <head>
+        <title>Питомцы</title>
+        <link rel="stylesheet" href="cssFile.css">
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+        <link rel="icon" href="dog.png" type="image/png">
+    </head>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        var config = {
+                      apiKey: "AIzaSyDqoha8Uz4MWs49Q4diqHo1ORwWpwheLZw",
+                      authDomain: "pets-1b119.firebaseapp.com",
+                      databaseURL: "https://pets-1b119-default-rtdb.firebaseio.com",
+                      projectId: "pets-1b119",
+                      storageBucket: "pets-1b119.appspot.com",
+                      messagingSenderId: "201656451729",
+                      appId: "1:201656451729:web:a8746e68fca336ab85f530",
+                      measurementId: "G-NMGXGV9X0P"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(config);
+        var userUid=localStorage.getItem("uid");
+        console.log(userUid); 
+        localStorage.setItem('uid', userUid);
+        logout.addEventListener('click',(e)=>{
+            alert('Вы вышли!');
+            location.href = "index.html";
+        });
+
+        feeding.addEventListener('click',(e)=>{
+            document.getElementById("text").innerHTML  = "Корректное питание является важным аспектом здоровья грызунов. Вот несколько рекомендаций по питанию:<br/>" +
+                "1. Сено должно быть основным и постоянным источником пищи для грызунов. Оно содержит необходимое количество волокна и помогает поддерживать здоровье пищеварительной системы.<br/>" +
+                "2. Корм для грызунов должен содержать достаточное количество витаминов и минералов. Некоторые виды грызунов могут быть более склонны к дефициту определенных витаминов и минералов, поэтому обязательно следует ознакомиться с потребностями своего питомца.<br/>" +
+                "3. Хотя фрукты и овощи могут быть вкусным лакомством для грызунов, они не должны быть основным источником питания. Их потребление должно быть умеренным и контролируемым, чтобы избежать избыточного потребления сахаров и крахмала.<br/>" +
+                "4. Определенные продукты, такие как шоколад, лук и арахисы, могут быть токсичными для грызунов и должны быть исключены из их рациона.<br/>" +
+                "5. Питьевая вода должна быть всегда доступной для грызунов.<br/>" +
+                "6. Наконец, следует регулярно контролировать вес своего питомца и, если необходимо, корректировать его рацион в соответствии с его питательными потребностями и физической активностью.<br/>";
+        });
+        cages.addEventListener('click', (e)=>{
+            document.getElementById("text").innerHTML  = "Клетки для грызунов должны соответствовать определенным требованиям для обеспечения комфорта и безопасности животных. Вот несколько рекомендаций:<br/>" +
+                "1. Размер клетки должен быть достаточным для животного, чтобы оно могло свободно двигаться и развиваться. Обычно для одного грызуна рекомендуется клетка размером не менее 60x40 см.<br/>" +
+                "2. Необходимо обеспечить клетку кормушками для сена и воды, а также местом для игры и отдыха. Для этого можно использовать домики, трубы, колеса или другие игрушки.<br/>" +
+                "3. Клетка должна быть легко чистимой и дезинфицируемой, чтобы предотвратить развитие инфекций и болезней.<br/>" +
+                "4. Важно обеспечить ежедневную гигиену животных, периодически менять подстилку и отмывать кормушки.<br/>" +
+                "5. Клетка должна быть расположена в сухом и теплом месте, защищенном от сквозняков и прямых солнечных лучей.<br/>" +
+                "Следуя этим рекомендациям, вы обеспечите здоровье и комфорт вашим грызунам.<br/>";
+        });
+        health.addEventListener('click', (e)=>{
+            document.getElementById("text").innerHTML  = "1. Правильное питание: Грызуны должны получать правильное питание, состоящее из свежих овощей, фруктов и зерновых кормов. Избегайте кормов, богатых жиром и сахаром, таких как семена подсолнечника и орехи.<br/>" +
+                "2. Чистота в клетке: Грызуны нуждаются в чистой и здоровой среде для жизни. Регулярно чистите и дезинфицируйте клетку, используя безопасные и эффективные средства.<br/>" +
+                "3. Регулярные визиты к ветеринару: Регулярные визиты к ветеринару помогут предотвратить заболевания, а также обеспечить, что ваш грызун получает все необходимые прививки.<br/>" +
+                "4. Уход за зубами: Грызуны имеют длинные зубы, которые могут расти слишком большими и причинять проблемы. Следите за состоянием зубов и обратитесь к ветеринару, если вы заметили какие-либо проблемы.<br/>" +
+                "5. Физическая активность: Грызуны нуждаются в физической активности, чтобы оставаться здоровыми и счастливыми. Предоставьте им дополнительные игрушки и возможности для пробежек и прыжков.<br/>" +
+                "6. Избегайте стресса: Грызуны чувствительны к стрессу, поэтому избегайте сильных звуков, перемещений и других факторов, которые могут вызвать стресс.<br/>" +
+                "Следование этим рекомендациям поможет сохранить вашего грызуна здоровым и счастливым на протяжении всей жизни.<br/>";
+        });
+        breeds.addEventListener('click', (e)=>{
+            document.getElementById("text").innerHTML  = "Существует множество видов домашних грызунов, некоторые из которых популярны как домашние животные. Вот некоторые из них:<br/>" +
+                "1. Крысы: мощные и умные грызуны, которые могут быть очень дружелюбными и лояльными к своим хозяевам.<br/>" +
+                "2. Мыши: меньше и более независимые, чем крысы, мыши обычно хорошо приспособлены к жизни в доме и могут быть довольно ласковыми.<br/>" +
+                "3. Хомяки: маленькие и пушистые, эти грызуны обычно легко ухаживать и могут стать отличными домашними животными для детей.<br/>" +
+                "4. Кролики: мягкие и милые, кролики часто бывают домашними животными, которых можно держать в клетке.<br/>" +
+                "5. Шиншиллы: активные и любопытные, эти грызуны требуют больше внимания и заботы, но могут стать отличными домашними животными для тех, кто готов уделять им время.<br/>" +
+                "6. Дегу: энергичные и социальные, эти грызуны могут стать отличными домашними животными, но им требуется просторная клетка и много движения.<br/>" +
+                "7. Ферреты: умные и любознательные, ферреты могут быть хорошими домашними животными, но они требуют много времени на заботу и тренировку.<br/>";
+
+        });
+
+       </script>
+    <body>
+
+        <!--шапка -->
+        <div id="heads" style="-webkit-font-smoothing: antialiased;background-color: #16a085;">
+            <div>
+                <div></div>
+                <div class= "div1">
+                    <div  class="div2">
+                        <div class="div3">
+                            <div class="div4">
+                                <div>
+                                    <div class="div5" field="title">Питомцы</div>                                      
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class = "left_menu">
+                            <div style="display: block;">
+                                    <img src="dog.png" style="max-width: 80px; width: 80px;">
+                            </div>
+                        </div>
+                
+                        <div class = "right_menu">
+                            <nav class="nav_menu">
+                                <ul class = "ul_menu">
+                                    <li class= "li1">
+                                        <a class="a_menu"  href="main.html"  data-menu-item-number="1"
+                                        >Назад</a>
+                                    </li>
+                                    <li class = "li2">
+                                        <a class="a_menu"  href="ads.html" data-menu-item-number="2"
+                                        >Объявления</a>
+                                    </li>
+                                    <li class="li3">
+                                        <a class="a_menu"  href="#contacts" data-menu-item-number="3"
+                                        >О нас</a>
+                                    </li>
+                                </ul>
+                                <div style="display: block; padding-left: 30px; padding-top: 30px; ">
+                                    <img src="logout.png" id='logout' name="logout" style="max-width: 40px; width: 40px;vertical-align: middle; ">
+                            </div>
+                            </nav>
+                            
+                        </div>
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-top:90px;padding-bottom:150px;">
+            <div>
+                <div class="catalogh">
+                    <div class="catalogh2">
+                        <div style="margin-bottom: 70px; text-align:center;">
+                            <div class="text3">Грызуны</div>							
+                        </div>
+                    </div>
+                </div>
+                <div class="catalog1" style="max-width: 1400;">
+                    <div>
+                        <div class="c1" style="max-width: 300px;">
+                            <div class="c2" style="height: 100px;">
+                                
+                                <div class="c3">
+                                    <div class="cb"></div>
+                                    <div class="c4">
+                                     
+                                        <div class="c5" style="padding-left: 0;">
+                                            <div>
+                                                <a id='feeding' class="ctext" style="font-size: 25;">Питание</a>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="c1" style="max-width: 300px;">
+                            <div class="c2" style="height: 100px;">
+                                
+                                <div class="c3">
+                                    <div class="cb"></div>
+                                    <div class="c4">
+                                     
+                                        <div class="c5" style="padding-left: 0;">
+                                            <div>
+                                                <a id='cages' class="ctext" style="font-size: 25;">Клетки</a>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="c1" style="max-width: 300px;">
+                            <div class="c2" style="height: 100px;">
+                                
+                                <div class="c3">
+                                    <div class="cb"></div>
+                                    <div class="c4">
+                                     
+                                        <div class="c5" style="padding-left: 0;">
+                                            <div>
+                                                <a id='health' class="ctext" style="font-size: 25;">Здоровье</a>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c1" style="max-width: 300px;">
+                            <div class="c2" style="height: 100px;margin-bottom: 100px;">
+                                
+                                <div class="c3">
+                                    <div class="cb"></div>
+                                    <div class="c4">
+                                     
+                                        <div class="c5" style="padding-left: 0;">
+                                            <div>
+                                                <a id = 'breeds' class="ctext" style="font-size: 25;">Виды грызунов</a>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>      
+                     
+                    </div>      
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-top:90px;padding-bottom:150px;">
+            <div>
+                
+                <div class="catalog1" style="max-width: 1020;">
+                   
+                     <p id = 'text' class = "ctext" style="color:teal;font-size: 25px;; text-align: justify;">Грызуны могут быть отличными питомцами для тех, кто ищет маленького, но активного и интересного друга. К ним относятся хомяки, морские свинки, крысы, мыши, шиншиллы и другие.
+
+                        Одним из наиболее популярных грызунов являются хомяки. Они очень активны и любят играть, особенно ночью. Хомяки могут жить в клетке или в специальном домике с колесом, трубами и другими игрушками, чтобы они могли забавляться и развиваться.
+                        
+                        Морские свинки также являются отличными питомцами-грызунами. Они социальны и любят общаться с другими своего вида. Морские свинки обычно живут в парах или группах и могут быть довольно ласковыми.
+                        
+                        Крысы и мыши тоже могут быть хорошими питомцами-грызунами. Они умны и быстры, и любят играть с игрушками и проводить время с людьми. Крысы и мыши могут также быть дрессированы, чтобы выполнять различные трюки.
+                        
+                        Шиншиллы также являются интересными питомцами-грызунами. Они могут жить до 20 лет и имеют мягкую, пушистую шерсть, которую можно использовать для производства одежды. Шиншиллы любят играть и могут быть довольно ласковыми, но им нужно много пространства, чтобы бегать и забавляться.
+                        
+                        Как и с любым другим питомцем, следует убедиться, что вы готовы к заботе о грызунах. Они нуждаются в ежедневном уходе, включая чистку клетки, кормление и заботу о здоровье. Если вы готовы к этим обязательствам, то грызуны могут стать прекрасными и интересными питомцами, которые принесут вам много радости и удовольствия.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="rec496919362" style="opacity: 1;"  data-record-type="215"   >
+            <a name="contacts" style="font-size:0;"></a>
+        </div>
+    
+        <div>
+            <div>
+                <div style="margin-top:70px;display: table;  width: 100%; text-align: center; background-color: #16a085;">      
+                    <div style="margin-top:100px;font-size: 25px; line-height: 1.23; color:#ffffff;font-family: 'Sans',Arial,sans-serif; font-weight: 600" field="text">
+                        ouner: Питомник собак TenderLoveUfa<br/>
+                        email: tenderloveufa@rambler.ru</div>      
+                    <div style="font-size: 20px; line-height: 1.55;margin-top: 30px;  margin-bottom: 30px;    font-family: 'Sans',Arial,sans-serif; font-weight: 300;color:#ffffff;" field="text2"          
+                        >г.Уфа</div>   
+                    <div style="margin-top: 20px; margin-bottom: 50px;">
+                        <div >
+                            <div style="display: inline-block; margin: 4px 1px 0;">
+                                <a  href="https://vk.com/id365843524" target="_blank" rel="nofollow" style="width: 48px; height: 48px;">
+                                    <svg width=48px height=48px viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50ZM25 34c.406 19.488 10.15 31.2 27.233 31.2h.968V54.05c6.278.625 11.024 5.216 12.93 11.15H75c-2.436-8.87-8.838-13.773-12.836-15.647C66.162 47.242 71.783 41.62 73.126 34h-8.058c-1.749 6.184-6.932 11.805-11.867 12.336V34h-8.057v21.611C40.147 54.362 33.838 48.304 33.556 34H25Z" fill="#c49300"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div style="display: inline-block; margin: 4px 1px 0;">
+                                <a  href="https://t.me/elsa_gg" target="_blank" rel="nofollow" style="width: 48px; height: 48px;">
+                                    <svg width=48px height=48px viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50Zm21.977-68.056c.386-4.38-4.24-2.576-4.24-2.576-3.415 1.414-6.937 2.85-10.497 4.302-11.04 4.503-22.444 9.155-32.159 13.734-5.268 1.932-2.184 3.864-2.184 3.864l8.351 2.577c3.855 1.16 5.91-.129 5.91-.129l17.988-12.238c6.424-4.38 4.882-.773 3.34.773l-13.49 12.882c-2.056 1.804-1.028 3.35-.129 4.123 2.55 2.249 8.82 6.364 11.557 8.16.712.467 1.185.778 1.292.858.642.515 4.111 2.834 6.424 2.319 2.313-.516 2.57-3.479 2.57-3.479l3.083-20.226c.462-3.511.993-6.886 1.417-9.582.4-2.546.705-4.485.767-5.362Z" fill="#c49300"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div style="display: inline-block; margin: 4px 1px 0;">
+                                <a  href = "https://wa.me/qr/YA2OQHJMXOQWH1" target="_blank" rel="nofollow" style="width: 48px; height: 48px;">
+                                    <svg width=48px height=48px viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100ZM69.7626 28.9928C64.6172 23.841 57.7739 21.0027 50.4832 21C35.4616 21 23.2346 33.2252 23.2292 48.2522C23.2274 53.0557 24.4823 57.7446 26.8668 61.8769L23 76L37.4477 72.2105C41.4282 74.3822 45.9107 75.5262 50.4714 75.528H50.4823C65.5029 75.528 77.7299 63.301 77.7363 48.2749C77.7408 40.9915 74.9089 34.1446 69.7626 28.9928ZM62.9086 53.9588C62.2274 53.6178 58.8799 51.9708 58.2551 51.7435C57.6313 51.5161 57.1766 51.4024 56.7228 52.0845C56.269 52.7666 54.964 54.2998 54.5666 54.7545C54.1692 55.2092 53.7718 55.2656 53.0915 54.9246C52.9802 54.8688 52.8283 54.803 52.6409 54.7217C51.6819 54.3057 49.7905 53.4855 47.6151 51.5443C45.5907 49.7382 44.2239 47.5084 43.8265 46.8272C43.4291 46.1452 43.7837 45.7769 44.1248 45.4376C44.3292 45.2338 44.564 44.9478 44.7987 44.662C44.9157 44.5194 45.0328 44.3768 45.146 44.2445C45.4345 43.9075 45.56 43.6516 45.7302 43.3049C45.7607 43.2427 45.7926 43.1776 45.8272 43.1087C46.0545 42.654 45.9409 42.2565 45.7708 41.9155C45.6572 41.6877 45.0118 40.1167 44.4265 38.6923C44.1355 37.984 43.8594 37.3119 43.671 36.8592C43.1828 35.687 42.6883 35.69 42.2913 35.6924C42.2386 35.6928 42.1876 35.6931 42.1386 35.6906C41.7421 35.6706 41.2874 35.667 40.8336 35.667C40.3798 35.667 39.6423 35.837 39.0175 36.5191C38.9773 36.5631 38.9323 36.6111 38.8834 36.6633C38.1738 37.4209 36.634 39.0648 36.634 42.2002C36.634 45.544 39.062 48.7748 39.4124 49.2411L39.415 49.2444C39.4371 49.274 39.4767 49.3309 39.5333 49.4121C40.3462 50.5782 44.6615 56.7691 51.0481 59.5271C52.6732 60.2291 53.9409 60.6475 54.9303 60.9612C56.5618 61.4796 58.046 61.4068 59.22 61.2313C60.5286 61.0358 63.2487 59.5844 63.8161 57.9938C64.3836 56.4033 64.3836 55.0392 64.2136 54.7554C64.0764 54.5258 63.7545 54.3701 63.2776 54.1395C63.1633 54.0843 63.0401 54.0247 62.9086 53.9588Z" fill="#c49300"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div style="display: table;  width: 100%; background-color: #16a085;"> 
+                    <p style="margin-left: 5px; color: #ffffff;  font-family: 'Sans',Arial,sans-serif;">pictures: 
+                        <a style=" font-family: 'Sans',Arial,sans-serif;color: #ffffff; text-decoration: none" href="https://www.flaticon.com/ru/">https://www.flaticon.com/ru/</a>
+                    </p> 
+                    
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
